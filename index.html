@@ -1221,9 +1221,7 @@ src="https://www.facebook.com/tr?id=1795595521418980&ev=PageView&noscript=1"
             await delay(2000);
             addButtons([{ text: 'REALIZAR PAGAMENTO', class: 'btn-primary btn-large', large: true, action: () => {
                 addMessage('left', '🔄 Processando...');
-                // Disparar evento de conversão do Facebook Pixel
-                if (typeof fbq !== 'undefined') {
-                    fbq('track', 'Purchase', { value: CONFIG.valor, currency: 'BRL' });
+              
                 }
                 setTimeout(() => {
                     window.location.href = CONFIG.gateway + window.location.search;
